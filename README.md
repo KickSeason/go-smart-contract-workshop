@@ -6,17 +6,19 @@ neo workshop for golang developers
 * golang v1.10, dep 
 * docker ce, docker-compose
 # Install neo-storm
+```
 cd $GOPATH/src
 git clone https://github.com/CityOfZion/neo-storm.git
 cd neo-storm
 dep ensure -update
 make install
+```
 > **NOTE**: if permission problems occur, please check the permission of the directory. Be careful with the GOPATH env between root and ordinary users.
 # Steps in workshop
 * setup your private neo blockchain using [neo-local](https://github.com/cityofzion/neo-local)
-* First smart contract, definately "Hello World": helloworld.go
-* runtime smart contract: runtime.go
-* storage using smart contract: storage.go
+* First smart contract, definitely "Hello World": [helloworld.go](https://github.com/KickSeason/neo-go-workshop/tree/master/helloworld)
+* runtime smart contract: [runtime.go](https://github.com/CityOfZion/neo-storm/blob/master/examples/runtime/runtime.go)
+* storage using smart contract: [storage.go](https://github.com/CityOfZion/neo-storm/blob/master/examples/storage/storage.go)
 * a domain registration smart contract: domain.go
 * neo nep5 smart contract: nep5.go, reference: [Step-by-step guide on issuing your NEP-5 token on NEO’s Private net using Go](https://medium.com/coinmonks/neo-token-contract-nep-5-in-go-f6b0102c59ee)
 * ICO template: ICOTemplate.go
@@ -30,4 +32,6 @@ make install
 # Often used build commands
 
 # Reference
+[neo-storm: the neo smart contract framework for golang](https://github.com/CityOfZion/neo-storm)
 
+[examples](https://github.com/CityOfZion/neo-storm/tree/master/examples)
