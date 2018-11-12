@@ -18,7 +18,7 @@ make install
 * runtime smart contract: runtime.go
 * storage using smart contract: storage.go
 * a domain registration smart contract: domain.go
-* neo nep5 smart contract: nep5.go
+* neo nep5 smart contract: nep5.go, reference: [Step-by-step guide on issuing your NEP-5 token on NEO’s Private net using Go](https://medium.com/coinmonks/neo-token-contract-nep-5-in-go-f6b0102c59ee)
 * ICO template: ICOTemplate.go
 
 # QuickStart
