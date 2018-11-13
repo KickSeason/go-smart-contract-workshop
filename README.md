@@ -1,5 +1,5 @@
 # neo-go-workshop
-neo workshop for golang developers
+neo smart contract workshop for golang developers
 # Requisite
 * operating system ubuntu descktop 18.04 lts
 * Git
