@@ -32,7 +32,7 @@ make install
 # Often used build commands
 
 # Warning
-support build in functions so far: "len", "__append__", "__SHA256__", "__SHA1__", "__Hash256__", "__Hash160__", "__FromAddress__", "__Equals__".
+support build in functions so far: "__len__", "__append__", "__SHA256__", "__SHA1__", "__Hash256__", "__Hash160__", "__FromAddress__", "__Equals__".
 > __FromAddress__ only support basic type 'string', variable not supported presently. 
 # Reference
 [neo-storm: the neo smart contract framework for golang](https://github.com/CityOfZion/neo-storm)
