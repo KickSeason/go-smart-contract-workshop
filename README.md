@@ -14,8 +14,23 @@ dep ensure -update
 make install
 ```
 > **NOTE**: if permission problems occur, please check the permission of the directory. Be careful with the GOPATH env between root and ordinary users.
-# Steps in workshop
+# Develop Enviroment
+ now neo-storm not support test and deploy contract, so we can use neo-python
 * setup your private neo blockchain using [neo-local](https://github.com/cityofzion/neo-local)
+* install neo-python: https://neo-python.readthedocs.io/en/latest/install.html , and refering this for interacting with smart contract:https://neo-python.readthedocs.io/en/latest/neo/SmartContract/smartcontracts.html
+* initialize your contract
+```
+neo-storm init -n mycontract
+```
+* deploy your contract using np-promt after you install neo-python, for example:
+```
+import contract ~/mycontract/main.avm 0710 f0 True False False
+```
+* test your contract
+```
+testinvoke 0xb1f0d096431eac7c90eba08a6b9dae692e01681c  b'register' [b'neo.org', b'\xef\x41\x9e\x5c\x66\x05\xf0\xad\xc6\xb8\x6f\x47\xff\x61\x19\xf9\xc2\x5d\x0e\x0f']
+```
+# Steps in workshop
 * First smart contract, definitely "Hello World": [helloworld.go](https://github.com/KickSeason/neo-go-workshop/tree/master/helloworld)
 * runtime smart contract: [runtime.go](https://github.com/CityOfZion/neo-storm/blob/master/examples/runtime/runtime.go)
 * storage using smart contract: [storage.go](https://github.com/CityOfZion/neo-storm/blob/master/examples/storage/storage.go)
