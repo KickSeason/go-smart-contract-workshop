@@ -1,0 +1,15 @@
+# Storm specific configuration. Do not modify this unless you know what you are doing!
+storm:
+  version: 1.0
+
+# Project section contains information about your smart contract
+project:
+  author: TomZhang
+  email: zhangtao@neo.org
+  version: 1.0
+  name: icotemplate
+  description: ico template
+
+# Module section contains a list of imported modules
+# This will be automatically managed by the neo-storm package manager
+modules: 
