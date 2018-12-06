@@ -38,6 +38,7 @@ testinvoke 0xb1f0d096431eac7c90eba08a6b9dae692e01681c  b'register' [b'neo.org', 
     * Learn using neo-python's build command with the test argument
     * Test differences between Log and Notify
 * runtime smart contract, using runtime.GetTrigger, runtime.Verification, runtime.CheckWitness and runtime.Application: [runtime.go](https://github.com/CityOfZion/neo-storm/blob/master/examples/runtime/runtime.go)
+   * as now neo-storm not support deploy and test, you can use neo-python
 * storage using smart contract: [storage.go](https://github.com/CityOfZion/neo-storm/blob/master/examples/storage/storage.go)
     * Storage is one of the key components of most smart contracts.
     * support bytes and string.
@@ -46,12 +47,14 @@ testinvoke 0xb1f0d096431eac7c90eba08a6b9dae692e01681c  b'register' [b'neo.org', 
 * a domain registration smart contract: [domain.go](https://github.com/KickSeason/neo-go-workshop/blob/master/domain/domain.go)
     * users can query, register, transfer and delete domains
     * important concept: checking of ownership
-* neo nep5 smart contract: [nep5.go](https://github.com/CityOfZion/neo-storm/tree/master/examples/token), reference: [Step-by-step guide on issuing your NEP-5 token on NEO’s Private net using Go](https://medium.com/coinmonks/neo-token-contract-nep-5-in-go-f6b0102c59ee)
+* neo nep5 smart contract: [nep5.go](https://github.com/CityOfZion/neo-storm/tree/master/examples/token)
+   * reference: [Step-by-step guide on issuing your NEP-5 token on NEO’s Private net using Go](https://medium.com/coinmonks/neo-token-contract-nep-5-in-go-f6b0102c59ee)
 * ICO template: [ICOTemplate.go](https://github.com/KickSeason/neo-go-workshop/blob/master/ICOTemplate/ICOTemplate.go)
 
 # Warning
 support build in functions so far: "__len__", "__append__", "__SHA256__", "__SHA1__", "__Hash256__", "__Hash160__", "__FromAddress__", "__Equals__".
 > __FromAddress__ only support basic type 'string', variable not supported presently. 
+
 # Reference
 [neo-storm: the neo smart contract framework for golang](https://github.com/CityOfZion/neo-storm)
 
