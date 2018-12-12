@@ -59,3 +59,6 @@ support build in functions so far: "__len__", "__append__", "__SHA256__", "__SHA
 [neo-storm: the neo smart contract framework for golang](https://github.com/CityOfZion/neo-storm)
 
 [examples](https://github.com/CityOfZion/neo-storm/tree/master/examples)
+
+# TODO
+workshop PPT
