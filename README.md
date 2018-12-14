@@ -61,4 +61,5 @@ support build in functions so far: "__len__", "__append__", "__SHA256__", "__SHA
 [examples](https://github.com/CityOfZion/neo-storm/tree/master/examples)
 
 # TODO
-workshop PPT
+* workshop PPT
+* write nep-5 and test
