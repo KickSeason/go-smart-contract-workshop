@@ -52,11 +52,7 @@ func CreateICO() ICOSettings {
 func Main(op string, args []interface{}) interface{} {
 	I := CreateICO()
 	if runtime.GetTrigger() == runtime.Verification() {
-		if len(I.Owner) == 20 ||
-			len(I.Owner) == 33 {
-			return runtime.CheckWitness(I.Owner)
-		}
-		return false
+		return runtime.CheckWitness(I.Owner)
 	} else if runtime.GetTrigger() == runtime.Application() {
 		if op == "name" {
 			return I.Name
@@ -64,38 +60,45 @@ func Main(op string, args []interface{}) interface{} {
 		if op == "symbol" {
 			return I.Symbol
 		}
-		ctx := storage.GetContext()
 		if op == "totalSupply" {
-			return I.TotalSupply(ctx)
+			return I.TotalSupply()
 		}
 		if op == "balanceOf" {
-			if len(args) < 1 {
+			if !checkArgs(args, 1) {
 				return false
 			}
 			address := args[0].([]byte)
-			return I.BalanceOf(ctx, address)
+			return I.BalanceOf(address)
 		}
 		if op == "transfer" {
-			if len(args) < 3 {
+			if !checkArgs(args, 3) {
 				return false
 			}
-			from := args[0].([]byte)
-			to := args[1].([]byte)
-			value := args[2].(int)
-			return I.Transfer(ctx, from, to, value)
+			fromHash := args[0].([]byte)
+			toHash := args[1].([]byte)
+			amount := args[2].(int)
+			return Transfer(fromHash, toHash, amount)
 		}
 		if op == "deploy" {
-			return I.Deploy(ctx)
+			return I.Deploy()
 		}
 		if op == "mintTokens" {
-			return I.MintTokens(ctx)
+			return I.MintTokens()
 		}
 	}
 	return nil
 }
 
+func checkArgs(args []interface{}, cnt int) bool {
+	if len(args) < cnt {
+		return false
+	}
+	return true
+}
+
 //Deploy initialize token
-func (I ICOSettings) Deploy(ctx storage.Context) bool {
+func (I ICOSettings) Deploy() bool {
+	ctx := storage.GetContext()
 	totalsupply := storage.Get(ctx, "totalSupply")
 	if 0 != totalsupply {
 		return false
@@ -106,23 +109,24 @@ func (I ICOSettings) Deploy(ctx storage.Context) bool {
 }
 
 //MintTokens mint a number of tokens to neo
-func (I ICOSettings) MintTokens(ctx storage.Context) bool {
+func (I ICOSettings) MintTokens() bool {
 	sender := GetSender()
 	if len(sender) == 0 {
 		return false
 	}
 	value := GetContributeValue()
-	rate := I.CurrentSwapRate(ctx)
+	rate := I.CurrentSwapRate()
 	if rate == 0 {
 		return false
 	}
 	if value == 0 {
 		return true
 	}
-	token := I.CurrentSwapToken(ctx, value, rate)
+	token := I.CurrentSwapToken(value, rate)
 	if token == 0 {
 		return false
 	}
+	ctx := storage.GetContext()
 	balance := storage.Get(ctx, sender).(int)
 	storage.Put(ctx, sender, balance+token)
 	totalsupply := storage.Get(ctx, "totalSupply").(int)
@@ -131,13 +135,47 @@ func (I ICOSettings) MintTokens(ctx storage.Context) bool {
 }
 
 //TotalSupply total token supply
-func (I ICOSettings) TotalSupply(ctx storage.Context) int {
+func (I ICOSettings) TotalSupply() int {
+	ctx := storage.GetContext()
 	totalsupply := storage.Get(ctx, "totalSupply").(int)
 	return totalsupply
 }
 
+//Transfer someone transfer tokens to other one
+func Transfer(fromHash []byte, toHash []byte, amount int) bool {
+	if amount < 0 {
+		return false
+	}
+	if !runtime.CheckWitness(fromHash) {
+		return false
+	}
+	if len(toHash) != 20 {
+		return false
+	}
+	if amount == 0 {
+		return true
+	}
+	ctx := storage.GetContext()
+	frombalance := storage.Get(ctx, fromHash).(int)
+	runtime.Notify(frombalance)
+	if frombalance < amount {
+		return false
+	}
+	if util.Equals(fromHash, toHash) {
+		return true
+	}
+	if frombalance == amount {
+		storage.Delete(ctx, fromHash)
+	} else {
+		storage.Put(ctx, fromHash, frombalance-amount)
+	}
+	tobalance := storage.Get(ctx, toHash).(int)
+	storage.Put(ctx, toHash, tobalance+amount)
+	return true
+}
+
 //CurrentSwapRate current exchange rate between neo and token
-func (I ICOSettings) CurrentSwapRate(ctx storage.Context) int {
+func (I ICOSettings) CurrentSwapRate() int {
 	now := runtime.GetTime()
 	if now < I.Start {
 		return 0
@@ -148,8 +186,9 @@ func (I ICOSettings) CurrentSwapRate(ctx storage.Context) int {
 }
 
 //CurrentSwapToken whether over contribute capacity, you can get the token amount
-func (I ICOSettings) CurrentSwapToken(ctx storage.Context, value int, rate int) int {
+func (I ICOSettings) CurrentSwapToken(value int, rate int) int {
 	token := value / I.NeoDecimal * rate
+	ctx := storage.GetContext()
 	totalsupply := storage.Get(ctx, "totalSupply").(int)
 	if I.TotalAmount <= totalsupply {
 		return 0
@@ -160,36 +199,9 @@ func (I ICOSettings) CurrentSwapToken(ctx storage.Context, value int, rate int) 
 	return token
 }
 
-//Transfer someone transfer tokens to other one
-func (I ICOSettings) Transfer(ctx storage.Context, from []byte, to []byte, value int) bool {
-	if value <= 0 {
-		return false
-	}
-	if !runtime.CheckWitness(from) {
-		return false
-	}
-	if len(to) != 20 {
-		return false
-	}
-	frombalance := storage.Get(ctx, from).(int)
-	if frombalance < value {
-		return false
-	}
-	if util.Equals(from, to) {
-		return true
-	}
-	if frombalance == value {
-		storage.Delete(ctx, from)
-	} else {
-		storage.Put(ctx, from, frombalance-value)
-	}
-	tobalance := storage.Get(ctx, to).(int)
-	storage.Put(ctx, to, tobalance+value)
-	return true
-}
-
 //BalanceOf get the balance of a account with address
-func (I ICOSettings) BalanceOf(ctx storage.Context, address []byte) int {
+func (I ICOSettings) BalanceOf(address []byte) int {
+	ctx := storage.GetContext()
 	balance := storage.Get(ctx, address).(int)
 	return balance
 }
